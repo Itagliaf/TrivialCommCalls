@@ -1,0 +1,6 @@
+#python modules
+
+*.pyc
+
+#folders
+venv/
