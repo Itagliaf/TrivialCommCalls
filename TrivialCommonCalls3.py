@@ -16,10 +16,11 @@ import sys
 import glob
 import threading
 import argparse
-
 import Defs
 
 #====CREATE A PARSER====
+
+
 parser = argparse.ArgumentParser(description='Options')
 
 parser.add_argument("-i" ,"--input_folder",
@@ -36,19 +37,38 @@ parser.add_argument("-o" ,"--output_folder",
 
 args = parser.parse_args()
 
-#========================
+#====Checking Arguments====
+print "Checking Arguments...\n"
 
+dir_file=args.input_folder
+if os.path.exists(os.path.abspath(args.input_folder)):
+    print "The folder containing the inputs is:"
+    print os.path.abspath(args.input_folder)
+else:
+    raise NameError("No Input folder")
+
+
+if os.path.exists(os.path.abspath(args.output_folder)):
+    print "\n"
+    print "The folder that will contain the output is:"
+    print os.path.abspath(args.output_folder)
+else:
+    raise NameError("No Output folder")
+
+print "\nLook good here, moving on \n"
+#====Check End====
+
+vcf_list=glob.glob(str(dir_file)+'*.vcf')
+
+print "Your input files are: \n" 
+for i in vcf_list:
+    print i
+#========================
 
 #I get the current dir
 Current_dir=os.getcwd()
 print Current_dir
-
-#Read argument "-i"
-
-dir_file=args.input_folder
-vcf_list=glob.glob(str(dir_file)+'*.vcf')
 # print '=================================================='
-
 
 #====VA PARALLELIZZATA!!!!=====
 for vcf in vcf_list:

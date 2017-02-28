@@ -6,10 +6,6 @@ import re
 import sys
 #glob per avere lista di file
 import glob
-#numpy per gli array
-import numpy as np
-#per avere data-frames
-import pandas as pd
 #per multithreding
 import threading
 
