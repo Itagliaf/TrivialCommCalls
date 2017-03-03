@@ -33,8 +33,12 @@ parser.add_argument("-o" ,"--output_folder",
                     dest="output_folder",
                     help="Folder that will contain the results")
 
+#To show "How to use" when no arguments are given
 
-
+if len(sys.argv)==1:
+    parser.print_help()
+    sys.exit(1)
+#Add the arguments to the program
 args = parser.parse_args()
 
 #====Checking Arguments====
