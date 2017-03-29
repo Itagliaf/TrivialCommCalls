@@ -16,13 +16,12 @@ import sys
 import glob
 import threading
 import argparse
-import Defs
+import shutil
 
+import Defs
 #====CREATE A PARSER====
 
-
 parser = argparse.ArgumentParser(description='Options')
-
 parser.add_argument("-i" ,"--input_folder",
                     type=str,
                     dest="input_folder",
@@ -56,50 +55,60 @@ if os.path.exists(os.path.abspath(args.output_folder)):
     print "\n"
     print "The folder that will contain the output is:"
     print os.path.abspath(args.output_folder)
+    out_folder=args.output_folder
 else:
     raise NameError("No Output folder")
 
 print "\nLook good here, moving on \n"
 #====Check End====
-
 vcf_list=glob.glob(str(dir_file)+'*.vcf')
+print vcf_list
 
 print "Your input files are: \n" 
 for i in vcf_list:
     print i
+
 #========================
 
 #I get the current dir
 Current_dir=os.getcwd()
 print Current_dir
-# print '=================================================='
+print '=================================================='
 
 #====VA PARALLELIZZATA!!!!=====
 for vcf in vcf_list:
-    Defs.Position_extractor(vcf)
+     Defs.Position_extractor(vcf)
 #====VA PARALLELIZZATA!!!!====
-vcf_pos_list=glob.glob(dir_file+'*.vcf.pos')
+
+#move pos files
+files = glob.iglob(os.path.join(dir_file, "*.pos"))
+for file in files:
+    if os.path.isfile(file):
+        shutil.copy2(file, out_folder)
+
+vcf_pos_list=glob.glob(out_folder+'*.vcf.pos')
+
 
 print "Finding the Common calls between couples:"
 print "=================================================="
 print "Common between " + vcf_pos_list[0] + " and " + vcf_pos_list[1] 
 Common_0_1_ls=[]
-Defs.CommonVariants2(vcf_pos_list[0],vcf_pos_list[1],'Common_0_1',Common_0_1_ls)
+Defs.CommonVariants2(vcf_pos_list[0],vcf_pos_list[1],out_folder+'Common_0_1',Common_0_1_ls)
 
 print "Common between " + vcf_pos_list[0] + " and " + vcf_pos_list[2] 
 Common_0_2_ls=[]
-Defs.CommonVariants2(vcf_pos_list[0],vcf_pos_list[2],'Common_0_2',Common_0_2_ls)
+Defs.CommonVariants2(vcf_pos_list[0],vcf_pos_list[2],out_folder+'Common_0_2',Common_0_2_ls)
 
 print "Common between " + vcf_pos_list[1] + " and " + vcf_pos_list[2] 
 Common_1_2_ls=[]
-Defs.CommonVariants2(vcf_pos_list[1],vcf_pos_list[2],'Common_1_2',Common_1_2_ls)
+Defs.CommonVariants2(vcf_pos_list[1],vcf_pos_list[2],out_folder+'Common_1_2',Common_1_2_ls)
  
-Common_list=glob.glob(Current_dir+'/Common_*.txt')#harcoded
+Common_list=glob.glob(out_folder+'/Common_*.txt')#harcoded
 
 print '=================================================='
 print "Finding common call betweel all the samples and the unique ones"
 
-diffs1,diffs2,diffs3,Inter_all=Defs.TripleCommonVariants(Common_0_1_ls,Common_0_2_ls,Common_1_2_ls)
+diffs1,diffs2,diffs3,Inter_all=Defs.TripleCommonVariants(Common_0_1_ls,Common_0_2_ls,Common_1_2_ls,out_folder)
 
 Inter_All_Sort=sorted(Inter_all)
 

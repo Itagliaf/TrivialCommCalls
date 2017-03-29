@@ -104,7 +104,7 @@ def CommonVariants2(File1,File2,OutFile,OutList):
     out_file.close()
     return OutList
 
-def TripleCommonVariants(list1,list2,list3):
+def TripleCommonVariants(list1,list2,list3,out_dir):
     """Gets the output from CommonVariants2, intersect the results
     and write the variants common to 2 or all methods in a file
     called final.txt"""
@@ -116,7 +116,7 @@ def TripleCommonVariants(list1,list2,list3):
     diff2=list(set(list2)-set(Inter_all))
     diff3=list(set(list3)-set(Inter_all))
 
-    final=open('final.txt','w',buffering=20000000)
+    final=open(out_dir+'final.txt','w',buffering=20000000)
     for i in diff1:
         final.write(i)
 
