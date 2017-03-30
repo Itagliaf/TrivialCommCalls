@@ -77,9 +77,11 @@ print Current_dir
 print '=================================================='
 
 #====VA PARALLELIZZATA!!!!=====
-for vcf in vcf_list:
-    Defs.Position_extractor(vcf)
-#    Defs.Position_extractor(vcf)
+
+lock=mp.Lock
+for i in vcf_list:
+    mp.Process(target=Defs.Position_extractor,args=(i,lock)).start
+
 #====VA PARALLELIZZATA!!!!====
 
 #move pos files
