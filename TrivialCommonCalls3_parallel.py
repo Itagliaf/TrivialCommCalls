@@ -78,9 +78,19 @@ print '=================================================='
 
 #====VA PARALLELIZZATA!!!!=====
 
-lock=mp.Lock
+#list of processes
+procs = []
+
+#for each input file start a process and put the ids of the procs in a
+#list
 for i in vcf_list:
-    mp.Process(target=Defs.Position_extractor,args=(i,lock)).start
+    p = mp.Process(target=Defs.Position_extractor,args=(i,))
+    procs.append(p)
+    p.start()
+
+#Synchronize all the processes
+for p in procs:
+    p.join()
 
 #====VA PARALLELIZZATA!!!!====
 

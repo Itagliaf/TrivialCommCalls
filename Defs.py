@@ -8,6 +8,10 @@ import sys
 import glob
 #per multithreding
 import threading
+#per processi
+import multiprocessing as mp
+
+
 
 #===========Function definition============#
 
@@ -84,7 +88,7 @@ def CommonVariants2(File1,File2,OutFile,OutList):
     t1 = threading.Thread(target=Variants, args=(File1,seq_f1))
     seq_f2 = []
     t2 = threading.Thread(target=Variants, args=(File2,seq_f2))
-    
+
     #Star the threads
     t1.start()
     t2.start()
